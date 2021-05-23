@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12
+    volumes:
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./storage/postgresql-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "strong_pass"
+      POSTGRES_DB: "redmine"
+      PGDATA: "/var/lib/postgresql/data"
+
+  app:
+    build:
+      context: ./app
+      dockerfile: ../docker/app/Dockerfile
+    depends_on:
+      - db
+      # - migration
+    command: >
+      sh -c "bundle exec rake db:migrate &&
+             REDMINE_LANG=en bundle exec rake redmine:load_default_data &&
+             puma -e production -p 3000"
+
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    depends_on:
+      - app
+    ports:
+      - 80:80
