@@ -12,8 +12,8 @@ RUN mkdir -p $RAILS_ROOT
 WORKDIR $RAILS_ROOT
 
 # Setting env up
-ENV RAILS_ENV='production'
-ENV RACK_ENV='production'
+ENV RAILS_ENV='test'
+ENV RACK_ENV='test'
 
 # Adding project files
 COPY . .

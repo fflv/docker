@@ -12,6 +12,7 @@ services:
       PGDATA: "/var/lib/postgresql/data"
 
   app:
+    # image: app_redmine:v1
     build:
       context: ./app
       dockerfile: ../docker/app/Dockerfile
@@ -31,3 +32,18 @@ services:
       - app
     ports:
       - 80:80
+
+  test:
+    # image: app_redmine:v1
+    build:
+      context: ./app
+      dockerfile: ../docker/test/Dockerfile      
+    depends_on:
+      - app
+      - db
+    command: >
+      sh -c "RAILS_ENV=test bundle exec rake db:migrate &&
+             REDMINE_LANG=en bundle exec rake redmine:load_default_data &&
+             bundle exec rake test"
+
+
