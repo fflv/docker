@@ -1,4 +1,11 @@
 rvm:
   - 2.7
-before_script: cd redmine
-script: "bundle exec rake test"
+
+services:
+  - docker
+
+before_script: 
+  - cd redmine
+
+script:
+  - docker-compose up -d

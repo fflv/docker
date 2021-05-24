@@ -2,13 +2,20 @@
 # Examples for PostgreSQL, SQLite3 and SQL Server can be found at the end.
 # Line indentation must be 2 spaces (no tabs).
 
-# PostgreSQL configuration example
-production:
+default: &default
   adapter: postgresql
-  database: redmine
   host: db
   username: postgres
   password: "strong_pass"
+
+test:
+  <<: *default
+  database: "redmine_test"
+
+# PostgreSQL configuration example
+production:
+  <<: *default
+  database: "redmine"
 
 # SQLite3 configuration example
 #production:
